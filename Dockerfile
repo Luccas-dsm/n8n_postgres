@@ -18,4 +18,5 @@ ENV N8N_BASIC_AUTH_ACTIVE=true \
     N8N_PORT=5678
 
 # Comando para iniciar o n8n
+
 CMD ["n8n"]
