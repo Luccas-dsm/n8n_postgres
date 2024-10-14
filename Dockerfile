@@ -21,4 +21,4 @@ ENV N8N_ENCRYPTION_KEY=${ENCRYPTION_KEY}
 EXPOSE 5678
 
 # Comando para iniciar o n8n
-CMD ["n8n", "start"]
+CMD ["n8n start"]
