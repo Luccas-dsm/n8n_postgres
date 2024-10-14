@@ -1,13 +1,17 @@
 FROM n8nio/n8n:latest
 
 USER node
-RUN mkdir /home/node/.n8n/nodes
+
+# Criação do diretório para os nós
+RUN mkdir -p /home/node/.n8n/nodes
+
+# Definindo o diretório de trabalho
 WORKDIR /home/node/.n8n/nodes 
-RUN npm i n8n-nodes-chatwoot
-RUN npm i n8n-nodes-text-manipulation
+
+# Instalando os nós personalizados
+RUN npm install n8n-nodes-chatwoot n8n-nodes-text-manipulation
 
 # Defina as variáveis de ambiente
-# Os valores das variáveis serão passados pelo Railway
 ENV DB_TYPE=postgresdb
 ENV DB_POSTGRESDB_DATABASE=${POSTGRES_DATABASE}
 ENV DB_POSTGRESDB_HOST=${POSTGRES_HOST}
@@ -21,4 +25,4 @@ ENV N8N_ENCRYPTION_KEY=${ENCRYPTION_KEY}
 EXPOSE 5678
 
 # Comando para iniciar o n8n
-CMD ["n8n start"]
+CMD ["n8n", "start"]
