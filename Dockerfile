@@ -1,27 +1,21 @@
-FROM n8nio/n8n:latest
+# Etapa 1: Usar uma imagem base com Node.js mais recente
+FROM node:latest AS build
 
-USER node
-RUN mkdir /home/node/.n8n/nodes
-WORKDIR /home/node/.n8n/nodes 
-RUN npm i n8n-nodes-chatwoot
-RUN npm i n8n-nodes-text-manipulation
+# Definir diretório de trabalho
+WORKDIR /app
 
-ARG PGPASSWORD
-ARG PGHOST
-ARG PGPORT
-ARG PGDATABASE
-ARG PGUSER
+# Instalar n8n globalmente
+RUN npm install -g n8n
 
-ENV DB_TYPE=postgresdb
-ENV DB_POSTGRESDB_DATABASE=$PGDATABASE
-ENV DB_POSTGRESDB_HOST=$PGHOST
-ENV DB_POSTGRESDB_PORT=$PGPORT
-ENV DB_POSTGRESDB_USER=$PGUSER
-ENV DB_POSTGRESDB_PASSWORD=$PGPASSWORD
+# Expor a porta do n8n
+EXPOSE 5678
 
+# Definir as variáveis de ambiente para o n8n
+ENV N8N_BASIC_AUTH_ACTIVE=true \
+    N8N_BASIC_AUTH_USER=user \
+    N8N_BASIC_AUTH_PASSWORD=pass \
+    N8N_HOST=0.0.0.0 \
+    N8N_PORT=5678
 
-ARG ENCRYPTION_KEY
-
-ENV N8N_ENCRYPTION_KEY=$ENCRYPTION_KEY
-
-CMD ["n8n start"]
+# Comando para iniciar o n8n
+CMD ["n8n"]
