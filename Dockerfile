@@ -1,5 +1,10 @@
-# Usando a imagem oficial do n8n como base
 FROM n8nio/n8n:latest
+
+USER node
+RUN mkdir /home/node/.n8n/nodes
+WORKDIR /home/node/.n8n/nodes 
+RUN npm i n8n-nodes-chatwoot
+RUN npm i n8n-nodes-text-manipulation
 
 # Defina as variáveis de ambiente
 # Os valores das variáveis serão passados pelo Railway
