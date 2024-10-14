@@ -1,37 +1,29 @@
-# Etapa 1: Usar uma imagem base com Node.js mais recente
-FROM node:latest AS build
+# Usando a imagem oficial do n8n como base
+FROM n8nio/n8n:latest
 
-# Definir diretório de trabalho
-WORKDIR /app
-
-# Instalar n8n globalmente
-RUN npm install -g n8n
-
+# Definindo a variável de build para a chave de criptografia
+ARG ENCRYPTION_KEY
 ARG PGPASSWORD
 ARG PGHOST
 ARG PGPORT
 ARG PGDATABASE
 ARG PGUSER
 
+# Definindo variáveis de ambiente
 ENV DB_TYPE=postgresdb
-ENV DB_POSTGRESDB_DATABASE=$PGDATABASE
-ENV DB_POSTGRESDB_HOST=$PGHOST
-ENV DB_POSTGRESDB_PORT=$PGPORT
-ENV DB_POSTGRESDB_USER=$PGUSER
-ENV DB_POSTGRESDB_PASSWORD=$PGPASSWORD
+ENV DB_POSTGRESDB_DATABASE=${POSTGRES_DATABASE}
+ENV DB_POSTGRESDB_HOST=${POSTGRES_HOST}
+ENV DB_POSTGRESDB_PORT=${POSTGRES_PORT}
+ENV DB_POSTGRESDB_USER=${POSTGRES_USER}
+ENV DB_POSTGRESDB_SCHEMA=${POSTGRES_SCHEMA}
+ENV DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+ENV N8N_ENCRYPTION_KEY=${ENCRYPTION_KEY}
 
-ARG ENCRYPTION_KEY
-ENV N8N_ENCRYPTION_KEY=$ENCRYPTION_KEY
-
-# Expor a porta do n8n
+# Expondo a porta padrão do n8n
 EXPOSE 5678
 
-# Definir as variáveis de ambiente para o n8n
-ENV N8N_BASIC_AUTH_ACTIVE=true \
-    N8N_BASIC_AUTH_USER=user \
-    N8N_BASIC_AUTH_PASSWORD=pass \
-    N8N_HOST=0.0.0.0 \
-    N8N_PORT=5678
+# Definindo o volume para persistir dados
+VOLUME /home/node/.n8n
 
 # Comando para iniciar o n8n
-CMD ["n8n"]
+CMD ["n8n", "start"]
