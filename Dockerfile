@@ -15,8 +15,5 @@ ENV N8N_ENCRYPTION_KEY=${ENCRYPTION_KEY}
 # Expondo a porta padrão do n8n
 EXPOSE 5678
 
-# Definindo o volume para persistir dados
-VOLUME /home/node/.n8n
-
 # Comando para iniciar o n8n
 CMD ["n8n", "start"]
